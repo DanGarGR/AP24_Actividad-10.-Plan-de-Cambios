@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agenda Telefónica</title>
+  <link rel="stylesheet" href="./Css/Css.css">
+  <script src="./Js/vue3.js"></script>
+</head>
+<body>
+    <div id="aplicacion">
+        <header>
+            <h1>Agenda Telefónica</h1>
+        </header>
+
+        <section id="nuevo-contacto">
+            <h2>Nuevo Contacto</h2>
+            <form @submit.prevent="agregarContacto">
+                <label for="nombre">Nombre:</label>
+                <input type="text" v-model="nuevoContacto.nombre" required>
+
+                <label for="telefono">Teléfono:</label>
+                <input type="tel" v-model="nuevoContacto.telefono" required pattern="[0-9]*">
+
+                <label for="categoria">Categoría:</label>
+                <select v-model="nuevoContacto.categoria" required>
+                    <option v-for="categoria in categorias" :key="categoria" :value="categoria">
+                        {{ categoria }}
+                    </option>
+                </select>
+
+                <button type="submit">Agregar Contacto</button>
+            </form>
+        </section>
+
+        <section id="tabla-contactos">
+            <h2>Lista de Contactos</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Eliminar</th>
+                        <th>Nombre</th>
+                        <th>Teléfono</th>
+                        <th>Categoría</th>
+                        <th>Mensajes</th>
+                        <th>Llamadas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(contacto, indice) in contactos" :key="indice">
+                        <td><button @click="eliminarContacto(indice)">Eliminar</button></td>
+                        <td>{{ contacto.nombre }}</td>
+                        <td>{{ contacto.telefono }}</td>
+                        <td>{{ contacto.categoria }}</td>
+                        <td>
+                            <button @click="ajustarMensajes(indice, -1)" :disabled="contacto.mensajes <= 0">-</button>
+                            {{ contacto.mensajes }}
+                            <button @click="ajustarMensajes(indice, 1)" :disabled="contacto.mensajes >= 25">+</button>
+                        </td>
+                        <td>
+                            <button @click="ajustarLlamadas(indice, -1)" :disabled="contacto.llamadas <= 0">-</button>
+                            {{ contacto.llamadas }}
+                            <button @click="ajustarLlamadas(indice, 1)" :disabled="contacto.llamadas >= 15">+</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div id="total-llamadas">
+                <p>Total de Llamadas: {{ totalLlamadas }}</p>
+                <p>Total de Mensajes: {{ totalMensajes }}</p>
+                <p>Total de Contactos: {{ totalContactos }}</p>
+            </div>
+        </section>
+    </div>
+
+    <script src="./Js/script.js"></script>
+</body>
+</html>
